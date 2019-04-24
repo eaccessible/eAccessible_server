@@ -83,23 +83,35 @@ public class ServeiWeb {
 				else{
 					connection = ds.getConnection();
 					
-					String query = "select * from eAccessible.local where codilocal="+codiLocal;
+					String query = "select coditipolocal,codicarrer,nomcarrer,nomvia,codilocal,nomlocal,numero,observacions,verificat from eAccessible.local where codilocal="+codiLocal;
 					Statement stm = connection.createStatement();
 					ResultSet rs = stm.executeQuery(query);
-					
-					local.setCoditipolocal(rs.getInt("coditipolocal"));
-					local.setCodicarrer(rs.getInt("codicarrer"));
-					local.setNomcarrer(rs.getString("nomcarrer"));
-					local.setNomvia(rs.getString("nomvia"));
-					local.setCodilocal(codiLocal);
-					local.setNomlocal(rs.getString("nomlocal"));
-		
-					
+					while(rs.next()) {
+						local.setCoditipolocal(rs.getInt("coditipolocal"));
+						local.setCodicarrer(rs.getInt("codicarrer"));
+						local.setNomcarrer(rs.getString("nomcarrer"));
+						local.setNomvia(rs.getString("nomvia"));
+						local.setCodilocal(rs.getInt("codilocal"));
+						local.setNomlocal(rs.getString("nomlocal"));
+						local.setNumero(rs.getInt("numero"));
+						local.setObservacions(rs.getString("observacions"));
+						local.setVerificat(rs.getString("verificat"));
+					}
 					connection.close();
 					stm.close();
 				}
 			}
 		}
+		catch(Exception e) {e.printStackTrace();}
+		finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return local;
 		
 	}
 	
