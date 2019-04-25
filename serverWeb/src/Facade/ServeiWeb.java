@@ -18,11 +18,8 @@ import bean.Accessibilitat;
 @WebService
 public class ServeiWeb {
 
-	/*@WebMethod
+	@WebMethod
 	public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) {
-				
-		System.out.print("\n AltaLocal");
-		
 		String strEstat = new String();
 		Connection connection = null;
 		
@@ -33,10 +30,13 @@ public class ServeiWeb {
 				if ( ds == null ) strEstat = "Error al crear el datasource";
 				else{
 					connection = ds.getConnection();
+					
+					String query = "insert into eAccessible.local (codilocal,coditipolocal,codicarrer,nomcarrer,nomvia,numero,nomlocal,observacions,verificat) values('"+local.getCodilocal()+"','"+local.getCoditipolocal()+"','"+local.getCodicarrer()+"','"+local.getNomcarrer()+"','"+local.getNomvia()+"','"+local.getNumero()+"','"+local.getNomlocal()+"','"+local.getObservacions()+"','"+local.getVerificat()+"')";
 					Statement stm = connection.createStatement();
-					stm.executeUpdate("insert into Local (codilocal,coditipolocal,codicarrer,nomcarrer,nomvia,numero,nomlocal,observacions,verificat) values('"+local.getCodilocal()+"','"+local.getCoditipolocal()+"','"+local.getCodicarrer()+"','"+local.getNomcarrer()+"','"+local.getNomvia()+"','"+local.getNumero()+"','"+local.getNomlocal()+"','"+local.getObservacions()+"','"+local.getVerificat()+"')");
+					stm.executeUpdate(query);
+					
 					for(int i=0; i<accessibilitat.size(); i=i+1) {
-						stm.executeUpdate("insert into Accessibilitat (codiaccessibilitat,codilocal,codicaracteristica,valor,verificat) values('"+accessibilitat.get(i).getCodiaccessibilitat()+"','"+accessibilitat.get(i).getCodilocal()+"','"+accessibilitat.get(i).getCodicaracteristica()+"','"+accessibilitat.get(i).getValor()+"','"+accessibilitat.get(i).getVerificat()+"')");
+						stm.executeUpdate("insert into eAccessible.accessibilitat (codiaccessibilitat,codilocal,codicaracteristica,valor,verificat) values('"+accessibilitat.get(i).getCodiaccessibilitat()+"','"+accessibilitat.get(i).getCodilocal()+"','"+accessibilitat.get(i).getCodicaracteristica()+"','"+accessibilitat.get(i).getValor()+"','"+accessibilitat.get(i).getVerificat()+"')");
 					}
 					
 					connection.close();
@@ -52,8 +52,8 @@ public class ServeiWeb {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}		
-	}*/
+		}
+	}
 	
 	
 	
