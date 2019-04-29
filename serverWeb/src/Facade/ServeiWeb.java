@@ -16,11 +16,13 @@ import javax.sql.DataSource;
 import bean.Accessibilitat;
 
 
+
 @WebService
-public class ServeiWeb{
+public class ServeiWeb{		
+
 	@WebMethod
 	public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) {
-		
+
 		String strEstat = new String();
 		Connection connection = null;
 		
@@ -37,7 +39,7 @@ public class ServeiWeb{
 					stm.executeUpdate(query);
 					
 					for(int i=0; i<accessibilitat.size(); i=i+1) {
-						stm.executeUpdate("insert into Accessibilitat (codiaccessibilitat,codilocal,codicaracteristica,valor,verificat) values('"+accessibilitat.get(i).getCodiaccessibilitat()+"','"+accessibilitat.get(i).getCodilocal()+"','"+accessibilitat.get(i).getCodicaracteristica()+"','"+accessibilitat.get(i).getValor()+"','"+accessibilitat.get(i).getVerificat()+"')");
+						stm.executeUpdate("insert into eAccessible.accessibilitat (codiaccessibilitat,codilocal,codicaracteristica,valor,verificat) values('"+accessibilitat.get(i).getCodiaccessibilitat()+"','"+accessibilitat.get(i).getCodilocal()+"','"+accessibilitat.get(i).getCodicaracteristica()+"','"+accessibilitat.get(i).getValor()+"','"+accessibilitat.get(i).getVerificat()+"')");
 					}
 					
 					connection.close();
@@ -53,8 +55,9 @@ public class ServeiWeb{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}		
-	}	
+
+		}
+	}
 	
 	@WebMethod
 	public void ValidaLocal (int codiLocal) {
