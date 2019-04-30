@@ -16,13 +16,11 @@ import javax.sql.DataSource;
 import bean.Accessibilitat;
 
 
-
 @WebService
-public class ServeiWeb{		
-
+public class ServeiWeb{
 	@WebMethod
 	public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) {
-
+		
 		String strEstat = new String();
 		Connection connection = null;
 		
@@ -39,8 +37,42 @@ public class ServeiWeb{
 					stm.executeUpdate(query);
 					
 					for(int i=0; i<accessibilitat.size(); i=i+1) {
-						stm.executeUpdate("insert into eAccessible.accessibilitat (codiaccessibilitat,codilocal,codicaracteristica,valor,verificat) values('"+accessibilitat.get(i).getCodiaccessibilitat()+"','"+accessibilitat.get(i).getCodilocal()+"','"+accessibilitat.get(i).getCodicaracteristica()+"','"+accessibilitat.get(i).getValor()+"','"+accessibilitat.get(i).getVerificat()+"')");
+						stm.executeUpdate("insert into Accessibilitat (codiaccessibilitat,codilocal,codicaracteristica,valor,verificat) values('"+accessibilitat.get(i).getCodiaccessibilitat()+"','"+accessibilitat.get(i).getCodilocal()+"','"+accessibilitat.get(i).getCodicaracteristica()+"','"+accessibilitat.get(i).getValor()+"','"+accessibilitat.get(i).getVerificat()+"')");
 					}
+					
+					connection.close();
+					stm.close();
+				}
+			}
+		}
+		catch(Exception e) {e.printStackTrace();}
+		finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}		
+	}	
+	
+	@WebMethod
+	public void ValidaLocal (int codiLocal) {
+		String strEstat = new String();
+		Connection connection = null;
+		
+		try{	
+			InitialContext cxt = new InitialContext();
+			if ( cxt != null ){
+				DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");
+				if ( ds == null ) strEstat = "Error al crear el datasource";
+				else{
+					connection = ds.getConnection();
+					
+					String query = "update eAccessible.local set verificat='S' where codilocal="+codiLocal;
+					Statement stm = connection.createStatement();
+					stm.executeUpdate(query);
+					
 					
 					connection.close();
 					stm.close();
@@ -57,10 +89,6 @@ public class ServeiWeb{
 			}
 
 		}
-	}
-	
-	@WebMethod
-	public void ValidaLocal (int codiLocal) {
 		
 	}
 	@WebMethod
