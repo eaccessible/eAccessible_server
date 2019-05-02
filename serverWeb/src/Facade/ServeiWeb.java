@@ -1,6 +1,7 @@
 package Facade;
 import bean.Local;
 import bean.TipoLocal;
+import exceptions.ExceptionController;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -19,16 +20,67 @@ import bean.Accessibilitat;
 @WebService
 public class ServeiWeb{
 	@WebMethod
-	public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) {
+	public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws ExceptionController {
 		
 		String strEstat = new String();
 		Connection connection = null;
+		
+		ExceptionController ex = new ExceptionController();
+		ex.setErrorCode(101);
+		if(local.getCodicarrer() <= 0) {
+			ex.setErrorMessage("No s'ha introduit un codi carrer vàlid");
+			throw(ex);
+		}if(local.getCodilocal() <= 0) {
+			ex.setErrorMessage("No s'ha introduit un codi local vàlid");
+			throw(ex);
+		}if(local.getCoditipolocal() <= 0) {
+			ex.setErrorMessage("No s'ha introduit un codi tipo local vàlid");
+			throw(ex);
+		}if(local.getNomcarrer().isEmpty()) {
+			ex.setErrorMessage("No s'ha introduit un nom de carrer vàlid");
+			throw(ex);
+		}if(local.getNomlocal().isEmpty()) {
+			ex.setErrorMessage("No s'ha introduit un nom de local vàlid");
+			throw(ex);
+		}if(local.getNomvia().isEmpty()) {
+			ex.setErrorMessage("No s'ha introduit un nom de vía vàlid");
+			throw(ex);
+		}if(local.getNumero() <= 0) {
+			ex.setErrorMessage("No s'ha introduit un número vàlid");
+			throw(ex);
+		}
+		
+		ex.setErrorCode(102);
+		for(int i=0; i<accessibilitat.size(); i=i+1) {
+			if(accessibilitat.get(i).getCodiaccessibilitat() <= 0) {
+				ex.setErrorMessage("No s'ha introduit un codí d'accessibilitat vàlid");
+				throw(ex);
+			}
+			if(accessibilitat.get(i).getCodicaracteristica() <= 0) {
+				ex.setErrorMessage("No s'ha introduit un codí de característica vàlid");
+				throw(ex);
+			}if(accessibilitat.get(i).getCodilocal() <= 0) {
+				ex.setErrorMessage("No s'ha introduit un codí de local vàlid");
+				throw(ex);
+			}
+			if(accessibilitat.get(i).getValor() <= 0) {
+				ex.setErrorMessage("No s'ha introduit un valor vàlid");
+				throw(ex);
+			}
+		}
+		
+		
 		
 		try{	
 			InitialContext cxt = new InitialContext();
 			if ( cxt != null ){
 				DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");
-				if ( ds == null ) strEstat = "Error al crear el datasource";
+				if ( ds == null ) {
+					strEstat = "Error al crear el datasource";
+					ex.setErrorCode(103);
+					ex.setErrorMessage("No hi ha connexió amb la base de dades");
+					throw(ex);
+				}
 				else{
 					connection = ds.getConnection();
 					
@@ -45,7 +97,14 @@ public class ServeiWeb{
 				}
 			}
 		}
-		catch(Exception e) {e.printStackTrace();}
+		catch(Exception e) {
+			
+			e.printStackTrace();
+			ex.setErrorCode(104);
+			ex.setErrorMessage("S'ha produït un error a la base de dades");
+			
+			
+		}
 		finally {
 			try {
 				connection.close();
