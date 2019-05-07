@@ -20,7 +20,7 @@ import bean.Accessibilitat;
 @WebService
 public class ServeiWeb{
 	@WebMethod
-public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws ExceptionController {
+	public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws ExceptionController {
 		
 		String strEstat = new String();
 		Connection connection = null;
@@ -68,6 +68,11 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 				ex.setErrorMessage("No s'ha introduit un valor vàlid");
 				throw(ex);
 			}
+			if(accessibilitat.get(i).getCodilocal() != local.getCodilocal()) {
+				ex.setErrorCode(103);
+				ex.setErrorMessage("S'ha detectat una referència a un local inadequat");
+				throw(ex);
+			}
 		}
 		
 		try{	
@@ -76,7 +81,7 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 				DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");
 				if ( ds == null ) {
 					strEstat = "Error al crear el datasource";
-					ex.setErrorCode(103);
+					ex.setErrorCode(104);
 					ex.setErrorMessage("No hi ha connexió amb la base de dades");
 					throw(ex);
 				}
@@ -98,7 +103,7 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 		}
 		catch(Exception e) {	
 			e.printStackTrace();
-			ex.setErrorCode(104);
+			ex.setErrorCode(105);
 			ex.setErrorMessage("S'ha produït un error a la base de dades");	
 		}
 		finally {
@@ -117,7 +122,7 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 		Connection connection = null;
 		
 		ExceptionController ex = new ExceptionController();
-		ex.setErrorCode(101);
+		ex.setErrorCode(201);
 		
 		try{	
 			InitialContext cxt = new InitialContext();
@@ -125,7 +130,7 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 				DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");
 				if ( ds == null ) {
 					strEstat = "Error al crear el datasource";
-					ex.setErrorCode(103);
+					ex.setErrorCode(204);
 					ex.setErrorMessage("No hi ha connexió amb la base de dades");
 					throw(ex);
 				}
@@ -144,7 +149,7 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			ex.setErrorCode(204);
+			ex.setErrorCode(205);
 			ex.setErrorMessage("S'ha produït un error a la base de dades");	
 		}
 		finally {
@@ -164,7 +169,6 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 		Connection connection = null;
 		
 		ExceptionController ex = new ExceptionController();
-		ex.setErrorCode(101);
 		
 		try{
 			InitialContext cxt = new InitialContext();
@@ -172,7 +176,7 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 				DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");
 				if ( ds == null ) {
 					strEstat = "Error al crear el datasource";
-					ex.setErrorCode(103);
+					ex.setErrorCode(304);
 					ex.setErrorMessage("No hi ha connexió amb la base de dades");
 					throw(ex);
 				}
@@ -189,7 +193,7 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 		}
 		catch(Exception e) {	
 			e.printStackTrace();
-			ex.setErrorCode(304);
+			ex.setErrorCode(305);
 			ex.setErrorMessage("S'ha produït un error a la base de dades");	
 		}
 		finally {
@@ -208,7 +212,6 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 		Connection connection = null;
 		
 		ExceptionController ex = new ExceptionController();
-		ex.setErrorCode(101);
 		
 		Local local = new Local();
 		
@@ -218,7 +221,7 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 				DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");
 				if ( ds == null ) {
 					strEstat = "Error al crear el datasource";
-					ex.setErrorCode(403);
+					ex.setErrorCode(404);
 					ex.setErrorMessage("No hi ha connexió amb la base de dades");
 					throw(ex);
 				}	
@@ -246,7 +249,7 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			ex.setErrorCode(404);
+			ex.setErrorCode(405);
 			ex.setErrorMessage("S'ha produït un error a la base de dades");
 			throw(ex);
 		}
@@ -277,7 +280,7 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 				DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");
 				if ( ds == null ) {
 					strEstat = "Error al crear el datasource";
-					ex.setErrorCode(503);
+					ex.setErrorCode(504);
 					ex.setErrorMessage("No hi ha connexió amb la base de dades");
 					throw(ex);
 				}
@@ -303,7 +306,7 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			ex.setErrorCode(504);
+			ex.setErrorCode(505);
 			ex.setErrorMessage("S'ha produït un error a la base de dades");
 			throw(ex);
 		}
@@ -324,7 +327,6 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 		Connection connection = null;
 		
 		ExceptionController ex = new ExceptionController();
-		ex.setErrorCode(101);
 
 		List <Local> localList = new ArrayList <Local>();
 		
@@ -334,7 +336,7 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 				DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");
 				if ( ds == null ) {
 					strEstat = "Error al crear el datasource";
-					ex.setErrorCode(603);
+					ex.setErrorCode(604);
 					ex.setErrorMessage("No hi ha connexió amb la base de dades");
 					throw(ex);
 				}
@@ -364,7 +366,7 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 		}
 		catch(Exception e) {	
 			e.printStackTrace();
-			ex.setErrorCode(604);
+			ex.setErrorCode(605);
 			ex.setErrorMessage("S'ha produït un error a la base de dades");	
 		}
 		finally {
@@ -384,7 +386,6 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 		Connection connection = null;
 		
 		ExceptionController ex = new ExceptionController();
-		ex.setErrorCode(101);
 		
 		List <Local> localList = new ArrayList <Local>();
 		
@@ -394,7 +395,7 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 				DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");
 				if ( ds == null ) {
 					strEstat = "Error al crear el datasource";
-					ex.setErrorCode(703);
+					ex.setErrorCode(704);
 					ex.setErrorMessage("No hi ha connexió amb la base de dades");
 					throw(ex);
 				}
@@ -424,7 +425,7 @@ public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws E
 		}
 		catch(Exception e) {	
 			e.printStackTrace();
-			ex.setErrorCode(704);
+			ex.setErrorCode(705);
 			ex.setErrorMessage("S'ha produït un error a la base de dades");	
 		}
 		finally {
