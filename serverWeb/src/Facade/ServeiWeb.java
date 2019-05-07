@@ -29,53 +29,53 @@ public class ServeiWeb{
 		ex.setErrorCode(101);
 		
 		if(local.getCodicarrer() <= 0) {
-			ex.setErrorMessage("No s'ha introduit un codi carrer vÃ lid");
+			ex.setErrorMessage("No s'ha introduit un codi carrer valid");
 			throw(ex);
 		}if(local.getCodilocal() <= 0) {
-			ex.setErrorMessage("No s'ha introduit un codi local vÃ lid");
+			ex.setErrorMessage("No s'ha introduit un codi local valid");
 			throw(ex);
 		}if(local.getCoditipolocal() <= 0) {
-			ex.setErrorMessage("No s'ha introduit un codi tipo local vÃ lid");
+			ex.setErrorMessage("No s'ha introduit un codi tipo local valid");
 			throw(ex);
 		}if(local.getNomcarrer().isEmpty()) {
-			ex.setErrorMessage("No s'ha introduit un nom de carrer vÃ lid");
+			ex.setErrorMessage("No s'ha introduit un nom de carrer valid");
 			throw(ex);
 		}if(local.getNomlocal().isEmpty()) {
-			ex.setErrorMessage("No s'ha introduit un nom de local vÃ lid");
+			ex.setErrorMessage("No s'ha introduit un nom de local valid");
 			throw(ex);
 		}if(local.getNomvia().isEmpty()) {
-			ex.setErrorMessage("No s'ha introduit un nom de vÃ­a vÃ lid");
+			ex.setErrorMessage("No s'ha introduit un nom de via valid");
 			throw(ex);
 		}if(local.getNumero() <= 0) {
-			ex.setErrorMessage("No s'ha introduit un nÃºmero vÃ lid");
+			ex.setErrorMessage("No s'ha introduit un numero valid");
 			throw(ex);
 		}
 		
 		ex.setErrorCode(102);
 		for(int i=0; i<accessibilitat.size(); i=i+1) {
 			if(accessibilitat.get(i).getCodiaccessibilitat() <= 0) {
-				ex.setErrorMessage("No s'ha introduit un codÃ­ d'accessibilitat vÃ lid");
+				ex.setErrorMessage("No s'ha introduit un codi d'accessibilitat valid");
 				throw(ex);
 			}
 			if(accessibilitat.get(i).getCodicaracteristica() <= 0) {
-				ex.setErrorMessage("No s'ha introduit un codÃ­ de caracterÃ­stica vÃ lid");
+				ex.setErrorMessage("No s'ha introduit un codi de caracteristica valid");
 				throw(ex);
 			}if(accessibilitat.get(i).getCodilocal() <= 0) {
-				ex.setErrorMessage("No s'ha introduit un codÃ­ de local vÃ lid");
+				ex.setErrorMessage("No s'ha introduit un codi de local valid");
 				throw(ex);
 			}
 			if(accessibilitat.get(i).getValor() <= 0) {
-				ex.setErrorMessage("No s'ha introduit un valor vÃ lid");
+				ex.setErrorMessage("No s'ha introduit un valor valid");
 				throw(ex);
 			}
 			if(accessibilitat.get(i).getCodilocal() != local.getCodilocal()) {
 				ex.setErrorCode(103);
-				ex.setErrorMessage("S'ha detectat una referÃ¨ncia a un local inadequat");
+				ex.setErrorMessage("S'ha detectat una referencia a un local inadequat");
 				throw(ex);
 			}
 			if(accessibilitat.get(i).getCodilocal() != local.getCodilocal()) {
 				ex.setErrorCode(103);
-				ex.setErrorMessage("S'ha detectat una referència a un local inadequat");
+				ex.setErrorMessage("S'ha detectat una referencia a un local inadequat");
 				throw(ex);
 			}
 		}
@@ -87,7 +87,7 @@ public class ServeiWeb{
 				if ( ds == null ) {
 					strEstat = "Error al crear el datasource";
 					ex.setErrorCode(104);
-					ex.setErrorMessage("No hi ha connexió amb la base de dades");
+					ex.setErrorMessage("No hi ha connexio amb la base de dades");
 
 					throw(ex);
 				}
@@ -110,7 +110,7 @@ public class ServeiWeb{
 		catch(Exception e) {	
 			e.printStackTrace();
 			ex.setErrorCode(105);
-			ex.setErrorMessage("S'ha produït un error a la base de dades");
+			ex.setErrorMessage("S'ha produit un error a la base de dades");
 			throw(ex);
 			
 		}
@@ -131,8 +131,6 @@ public class ServeiWeb{
 		String strEstat = new String();
 		Connection connection = null;
 		ExceptionController ex = new ExceptionController();
-		
-		ExceptionController ex = new ExceptionController();
 		ex.setErrorCode(201);
 		
 		try{	
@@ -142,7 +140,7 @@ public class ServeiWeb{
 				if ( ds == null ) {
 					strEstat = "Error al crear el datasource";
 					ex.setErrorCode(204);
-					ex.setErrorMessage("No hi ha connexió amb la base de dades");
+					ex.setErrorMessage("No hi ha connexio amb la base de dades");
 					throw(ex);
 				}
 				else{
@@ -162,7 +160,7 @@ public class ServeiWeb{
 			e.printStackTrace();
 			ex.setErrorCode(205);
 
-			ex.setErrorMessage("S'ha produït un error a la base de dades");
+			ex.setErrorMessage("S'ha produit un error a la base de dades");
 			throw(ex);
 
 		}
@@ -183,7 +181,6 @@ public class ServeiWeb{
 		Connection connection = null;
 		ExceptionController ex = new ExceptionController();
 		
-		ExceptionController ex = new ExceptionController();
 		
 		try{
 			InitialContext cxt = new InitialContext();
@@ -192,7 +189,7 @@ public class ServeiWeb{
 				if ( ds == null ) {
 					strEstat = "Error al crear el datasource";
 					ex.setErrorCode(304);
-					ex.setErrorMessage("No hi ha connexió amb la base de dades");
+					ex.setErrorMessage("No hi ha connexio amb la base de dades");
 
 					throw(ex);
 				}
@@ -211,7 +208,7 @@ public class ServeiWeb{
 		catch(Exception e) {
 			e.printStackTrace();
 			ex.setErrorCode(305);
-			ex.setErrorMessage("S'ha produït un error a la base de dades");
+			ex.setErrorMessage("S'ha produit un error a la base de dades");
 			throw(ex);
 
 		}
@@ -226,13 +223,13 @@ public class ServeiWeb{
 	}
 	
 	@WebMethod
-	public Local InfoLocal(int codiLocal) throws ExceptionController{
+	public List<Local> InfoLocalPerNomLocal(String nomLocal) throws ExceptionController{
 		String strEstat = new String();
 		Connection connection = null;
 		
 		ExceptionController ex = new ExceptionController();
 		
-		Local local = new Local();
+		List<Local> localList = new ArrayList<Local>();
 		
 		try{	
 			InitialContext cxt = new InitialContext();
@@ -241,16 +238,17 @@ public class ServeiWeb{
 				if ( ds == null ) {
 					strEstat = "Error al crear el datasource";
 					ex.setErrorCode(404);
-					ex.setErrorMessage("No hi ha connexiÃ³ amb la base de dades");
+					ex.setErrorMessage("No hi ha connexio amb la base de dades");
 					throw(ex);
 				}	
 				else{
 					connection = ds.getConnection();
 					
-					String query = "select coditipolocal,codicarrer,nomcarrer,nomvia,codilocal,nomlocal,numero,observacions,verificat from eAccessible.local where codilocal="+codiLocal;
+					String query = "select coditipolocal,codicarrer,nomcarrer,nomvia,codilocal,nomlocal,numero,observacions,verificat from eAccessible.local where nomlocal LIKE UPPER('%"+nomLocal+"%')";
 					Statement stm = connection.createStatement();
 					ResultSet rs = stm.executeQuery(query);
 					while(rs.next()) {
+						Local local = new Local();
 						local.setCoditipolocal(rs.getInt("coditipolocal"));
 						local.setCodicarrer(rs.getInt("codicarrer"));
 						local.setNomcarrer(rs.getString("nomcarrer"));
@@ -260,6 +258,7 @@ public class ServeiWeb{
 						local.setNumero(rs.getInt("numero"));
 						local.setObservacions(rs.getString("observacions"));
 						local.setVerificat(rs.getString("verificat"));
+						localList.add(local);
 					}
 					connection.close();
 					stm.close();
@@ -269,7 +268,7 @@ public class ServeiWeb{
 		catch(Exception e) {
 			e.printStackTrace();
 			ex.setErrorCode(405);
-			ex.setErrorMessage("S'ha produÃ¯t un error a la base de dades");
+			ex.setErrorMessage("S'ha produit un error a la base de dades");
 			throw(ex);
 		}
 		finally {
@@ -280,7 +279,67 @@ public class ServeiWeb{
 				e.printStackTrace();
 			}
 		}
-		return local;
+		return localList;
+	}
+	
+	@WebMethod
+	public List<Local> InfoLocalPerTipoLocal(int codiTipoLocal) throws ExceptionController{
+		String strEstat = new String();
+		Connection connection = null;
+		
+		ExceptionController ex = new ExceptionController();
+		
+		List<Local> localList = new ArrayList<Local>();
+		
+		try{	
+			InitialContext cxt = new InitialContext();
+			if ( cxt != null ){
+				DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");
+				if ( ds == null ) {
+					strEstat = "Error al crear el datasource";
+					ex.setErrorCode(804);
+					ex.setErrorMessage("No hi ha connexio amb la base de dades");
+					throw(ex);
+				}	
+				else{
+					connection = ds.getConnection();
+					
+					String query = "select coditipolocal,codicarrer,nomcarrer,nomvia,codilocal,nomlocal,numero,observacions,verificat from eAccessible.local where coditipolocal="+codiTipoLocal;
+					Statement stm = connection.createStatement();
+					ResultSet rs = stm.executeQuery(query);
+					while(rs.next()) {
+						Local local = new Local();
+						local.setCoditipolocal(rs.getInt("coditipolocal"));
+						local.setCodicarrer(rs.getInt("codicarrer"));
+						local.setNomcarrer(rs.getString("nomcarrer"));
+						local.setNomvia(rs.getString("nomvia"));
+						local.setCodilocal(rs.getInt("codilocal"));
+						local.setNomlocal(rs.getString("nomlocal"));
+						local.setNumero(rs.getInt("numero"));
+						local.setObservacions(rs.getString("observacions"));
+						local.setVerificat(rs.getString("verificat"));
+						localList.add(local);
+					}
+					connection.close();
+					stm.close();
+				}
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			ex.setErrorCode(805);
+			ex.setErrorMessage("S'ha produit un error a la base de dades");
+			throw(ex);
+		}
+		finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return localList;
 	}
 	
 	@WebMethod
@@ -300,7 +359,7 @@ public class ServeiWeb{
 				if ( ds == null ) {
 					strEstat = "Error al crear el datasource";
 					ex.setErrorCode(504);
-					ex.setErrorMessage("No hi ha connexiÃ³ amb la base de dades");
+					ex.setErrorMessage("No hi ha connexio amb la base de dades");
 					throw(ex);
 				}
 				else{
@@ -326,7 +385,7 @@ public class ServeiWeb{
 		catch(Exception e) {
 			e.printStackTrace();
 			ex.setErrorCode(505);
-			ex.setErrorMessage("S'ha produÃ¯t un error a la base de dades");
+			ex.setErrorMessage("S'ha produit un error a la base de dades");
 			throw(ex);
 		}
 		finally {
@@ -356,7 +415,7 @@ public class ServeiWeb{
 				if ( ds == null ) {
 					strEstat = "Error al crear el datasource";
 					ex.setErrorCode(604);
-					ex.setErrorMessage("No hi ha connexiÃ³ amb la base de dades");
+					ex.setErrorMessage("No hi ha connexio amb la base de dades");
 					throw(ex);
 				}
 				else{
@@ -386,7 +445,7 @@ public class ServeiWeb{
 		catch(Exception e) {	
 			e.printStackTrace();
 			ex.setErrorCode(605);
-			ex.setErrorMessage("S'ha produÃ¯t un error a la base de dades");	
+			ex.setErrorMessage("S'ha produit un error a la base de dades");	
 		}
 		finally {
 			try {
@@ -415,7 +474,7 @@ public class ServeiWeb{
 				if ( ds == null ) {
 					strEstat = "Error al crear el datasource";
 					ex.setErrorCode(704);
-					ex.setErrorMessage("No hi ha connexiÃ³ amb la base de dades");
+					ex.setErrorMessage("No hi ha connexio amb la base de dades");
 					throw(ex);
 				}
 				else{
@@ -445,7 +504,7 @@ public class ServeiWeb{
 		catch(Exception e) {	
 			e.printStackTrace();
 			ex.setErrorCode(705);
-			ex.setErrorMessage("S'ha produÃ¯t un error a la base de dades");	
+			ex.setErrorMessage("S'ha produit un error a la base de dades");	
 		}
 		finally {
 			try {
