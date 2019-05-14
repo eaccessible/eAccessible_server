@@ -20,7 +20,7 @@ import bean.Accessibilitat;
 @WebService
 public class ServeiWeb{
 	@WebMethod
-	public void AltaLocal(Local local, List<Accessibilitat> accessibilitat) throws ExceptionController {
+	public void altaLocal(Local local, List<Accessibilitat> accessibilitat) throws ExceptionController {
 		
 		String strEstat = new String();
 		Connection connection = null;
@@ -126,7 +126,7 @@ public class ServeiWeb{
 	
 	@WebMethod
 
-	public void ValidaLocal (int codiLocal) throws ExceptionController{
+	public void validaLocal (int codiLocal) throws ExceptionController{
 
 		String strEstat = new String();
 		Connection connection = null;
@@ -176,7 +176,7 @@ public class ServeiWeb{
 		
 	}
 	@WebMethod
-	public void BaixaLocal (int codiLocal) throws ExceptionController {
+	public void baixaLocal (int codiLocal) throws ExceptionController {
 		String strEstat = new String();
 		Connection connection = null;
 		ExceptionController ex = new ExceptionController();
@@ -223,7 +223,7 @@ public class ServeiWeb{
 	}
 	
 	@WebMethod
-	public List<Local> InfoLocalPerNomLocal(String nomLocal) throws ExceptionController{
+	public List<Local> infoLocalPerNomLocal(String nomLocal) throws ExceptionController{
 		String strEstat = new String();
 		Connection connection = null;
 		
@@ -283,7 +283,7 @@ public class ServeiWeb{
 	}
 	
 	@WebMethod
-	public List<Local> InfoLocalPerTipoLocal(int codiTipoLocal) throws ExceptionController{
+	public List<Local> infoLocalPerTipoLocal(int codiTipoLocal) throws ExceptionController{
 		String strEstat = new String();
 		Connection connection = null;
 		
@@ -343,7 +343,7 @@ public class ServeiWeb{
 	}
 	
 	@WebMethod
-	public List<TipoLocal> CercaTipoLocal() throws ExceptionController{
+	public List<TipoLocal> cercaTipoLocal() throws ExceptionController{
 				
 		String strEstat = new String();
 		Connection connection = null;
@@ -400,7 +400,7 @@ public class ServeiWeb{
 	}
 	
 	@WebMethod
-	public List<Local> LocalnoVerificat() throws ExceptionController{
+	public List<Local> localnoVerificat() throws ExceptionController{
 		String strEstat = new String();
 		Connection connection = null;
 		
@@ -459,7 +459,7 @@ public class ServeiWeb{
 	}
 	
 	@WebMethod
-	public List<Local> LocalsAccessibles(int codiCaracteristica) throws ExceptionController {
+	public List<Local> localsAccessibles(int codiCaracteristica) throws ExceptionController {
 		String strEstat = new String();
 		Connection connection = null;
 		
