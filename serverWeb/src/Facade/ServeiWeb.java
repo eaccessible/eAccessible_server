@@ -94,12 +94,12 @@ public class ServeiWeb{
 				else{
 					connection = ds.getConnection();
 					
-					String query = "insert into eAccessible.local (codilocal,coditipolocal,codicarrer,nomcarrer,nomvia,numero,nomlocal,observacions,verificat) values('"+local.getCodilocal()+"','"+local.getCoditipolocal()+"','"+local.getCodicarrer()+"','"+local.getNomcarrer()+"','"+local.getNomvia()+"','"+local.getNumero()+"','"+local.getNomlocal()+"','"+local.getObservacions()+"','"+local.getVerificat()+"')";
+					String query = "insert into eAccessible.local (codilocal,coditipolocal,codicarrer,nomcarrer,nomvia,numero,nomlocal,observacions,verificat) values('"+local.getCodilocal()+"','"+local.getCoditipolocal()+"','"+local.getCodicarrer()+"','"+local.getNomcarrer()+"','"+local.getNomvia()+"','"+local.getNumero()+"',UPPER('"+local.getNomlocal()+"'),'"+local.getObservacions()+"','"+local.getVerificat()+"')";
 					Statement stm = connection.createStatement();
 					stm.executeUpdate(query);
 					
 					for(int i=0; i<accessibilitat.size(); i=i+1) {
-						stm.executeUpdate("insert into Accessibilitat (codiaccessibilitat,codilocal,codicaracteristica,valor,verificat) values('"+accessibilitat.get(i).getCodiaccessibilitat()+"','"+accessibilitat.get(i).getCodilocal()+"','"+accessibilitat.get(i).getCodicaracteristica()+"','"+accessibilitat.get(i).getValor()+"','"+accessibilitat.get(i).getVerificat()+"')");
+						stm.executeUpdate("insert into eAccessible.accessibilitat (codiaccessibilitat,codilocal,codicaracteristica,valor,verificat) values('"+accessibilitat.get(i).getCodiaccessibilitat()+"','"+accessibilitat.get(i).getCodilocal()+"','"+accessibilitat.get(i).getCodicaracteristica()+"','"+accessibilitat.get(i).getValor()+"','"+accessibilitat.get(i).getVerificat()+"')");
 					}
 					
 					connection.close();
@@ -220,6 +220,66 @@ public class ServeiWeb{
 				e.printStackTrace();
 			}
 		}		
+	}
+	
+	@WebMethod
+	public List<Local> infoLocalPerNomLocalICodiTipoLocal(String nomLocal, int codiTipoLocal) throws ExceptionController{
+		String strEstat = new String();
+		Connection connection = null;
+		
+		ExceptionController ex = new ExceptionController();
+		
+		List<Local> localList = new ArrayList<Local>();
+		
+		try{	
+			InitialContext cxt = new InitialContext();
+			if ( cxt != null ){
+				DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");
+				if ( ds == null ) {
+					strEstat = "Error al crear el datasource";
+					ex.setErrorCode(904);
+					ex.setErrorMessage("No hi ha connexio amb la base de dades");
+					throw(ex);
+				}	
+				else{
+					connection = ds.getConnection();
+					
+					String query = "select coditipolocal,codicarrer,nomcarrer,nomvia,codilocal,nomlocal,numero,observacions,verificat from eAccessible.local where nomlocal LIKE UPPER('%"+nomLocal+"%') AND coditipolocal="+codiTipoLocal ;
+					Statement stm = connection.createStatement();
+					ResultSet rs = stm.executeQuery(query);
+					while(rs.next()) {
+						Local local = new Local();
+						local.setCoditipolocal(rs.getInt("coditipolocal"));
+						local.setCodicarrer(rs.getInt("codicarrer"));
+						local.setNomcarrer(rs.getString("nomcarrer"));
+						local.setNomvia(rs.getString("nomvia"));
+						local.setCodilocal(rs.getInt("codilocal"));
+						local.setNomlocal(rs.getString("nomlocal"));
+						local.setNumero(rs.getInt("numero"));
+						local.setObservacions(rs.getString("observacions"));
+						local.setVerificat(rs.getString("verificat"));
+						localList.add(local);
+					}
+					connection.close();
+					stm.close();
+				}
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			ex.setErrorCode(905);
+			ex.setErrorMessage("S'ha produit un error a la base de dades");
+			throw(ex);
+		}
+		finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return localList;
 	}
 	
 	@WebMethod
