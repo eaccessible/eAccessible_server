@@ -634,13 +634,13 @@ public class ServeiWeb{
 	}
 	
 	@WebMethod
-	public List<Caracteristica>  infoCaracteristica(int codiCaracteristica) throws ExceptionController{
+	public Caracteristica  infoCaracteristica(int codiCaracteristica) throws ExceptionController{
 		String strEstat = new String();
 		Connection connection = null;
 		
 		ExceptionController ex = new ExceptionController();
 		
-		List<Caracteristica> caracteristicaList = new ArrayList<Caracteristica>();
+		Caracteristica caracteristica = new Caracteristica();
 		
 		try{	
 			InitialContext cxt = new InitialContext();
@@ -658,16 +658,15 @@ public class ServeiWeb{
 					String query = "select codicaracteristica, nomcaracteristicaca, nomcaracteristicaes, nomcaracteristicaen, tipo, codinivell  from eAccessible.caracteristica where caracteristica.codicaracteristica="+codiCaracteristica;
 					Statement stm = connection.createStatement();
 					ResultSet rs = stm.executeQuery(query);
-					while(rs.next()) {
-						Caracteristica caracteristica = new Caracteristica();
-						caracteristica.setCodicaracteristica(rs.getInt("codicaracteristica"));
-						caracteristica.setNomcaracteristicaca(rs.getString("nomcaracteristicaca"));
-						caracteristica.setNomcaracteristicaes(rs.getString("nomcaracteristicaes"));
-						caracteristica.setNomcaracteristicaen(rs.getString("nomcaracteristicaen"));
-						caracteristica.setTipo(rs.getInt("tipo"));
-						caracteristica.setCodinivell(rs.getInt("codinivell"));
-						caracteristicaList.add(caracteristica);
-					}
+					rs.next();
+					
+					caracteristica.setCodicaracteristica(rs.getInt("codicaracteristica"));
+					caracteristica.setNomcaracteristicaca(rs.getString("nomcaracteristicaca"));
+					caracteristica.setNomcaracteristicaes(rs.getString("nomcaracteristicaes"));
+					caracteristica.setNomcaracteristicaen(rs.getString("nomcaracteristicaen"));
+					caracteristica.setTipo(rs.getInt("tipo"));
+					caracteristica.setCodinivell(rs.getInt("codinivell"));
+					
 					connection.close();
 					stm.close();
 				}
@@ -687,6 +686,6 @@ public class ServeiWeb{
 				e.printStackTrace();
 			}
 		}
-		return caracteristicaList;
+		return caracteristica;
 	}
 }
