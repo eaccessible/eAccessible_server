@@ -15,6 +15,8 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import bean.Accessibilitat;
+import bean.Caracteristica;
+import bean.CaracteristicaTipoLocal;
 
 
 @WebService
@@ -575,5 +577,116 @@ public class ServeiWeb{
 			}
 		}
 		return localList;
+	}
+	
+	@WebMethod
+	public List<CaracteristicaTipoLocal>  infoCaracteristicaTipoLocal(int codiTipoLocal) throws ExceptionController{
+		String strEstat = new String();
+		Connection connection = null;
+		
+		ExceptionController ex = new ExceptionController();
+		
+		List<CaracteristicaTipoLocal> caracteristicaTipoLocalList = new ArrayList<CaracteristicaTipoLocal>();
+		
+		try{	
+			InitialContext cxt = new InitialContext();
+			if ( cxt != null ){
+				DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");
+				if ( ds == null ) {
+					strEstat = "Error al crear el datasource";
+					ex.setErrorCode(1004);
+					ex.setErrorMessage("No hi ha connexio amb la base de dades");
+					throw(ex);
+				}
+				else{
+					connection = ds.getConnection();
+					
+					String query = "select codicaracteristicatipolocal, codicaracteristica, coditipolocal from eAccessible.caracteristicatipolocal where caracteristicatipolocal.coditipolocal="+codiTipoLocal;
+					Statement stm = connection.createStatement();
+					ResultSet rs = stm.executeQuery(query);
+					while(rs.next()) {
+						CaracteristicaTipoLocal caracteristicaTipoLocal = new CaracteristicaTipoLocal();
+						caracteristicaTipoLocal.setCodicaracteristicatipolocal(rs.getInt("codicaracteristicatipolocal"));
+						caracteristicaTipoLocal.setCodicaracteristica(rs.getInt("codicaracteristica"));
+						caracteristicaTipoLocal.setCoditipolocal(rs.getInt("coditipolocal"));
+						caracteristicaTipoLocalList.add(caracteristicaTipoLocal);
+					}
+					connection.close();
+					stm.close();
+				}
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			ex.setErrorCode(1005);
+			ex.setErrorMessage("S'ha produit un error a la base de dades");
+			throw(ex);
+		}
+		finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return caracteristicaTipoLocalList;
+	}
+	
+	@WebMethod
+	public List<Caracteristica>  infoCaracteristica(int codiCaracteristica) throws ExceptionController{
+		String strEstat = new String();
+		Connection connection = null;
+		
+		ExceptionController ex = new ExceptionController();
+		
+		List<Caracteristica> caracteristicaList = new ArrayList<Caracteristica>();
+		
+		try{	
+			InitialContext cxt = new InitialContext();
+			if ( cxt != null ){
+				DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");
+				if ( ds == null ) {
+					strEstat = "Error al crear el datasource";
+					ex.setErrorCode(1104);
+					ex.setErrorMessage("No hi ha connexio amb la base de dades");
+					throw(ex);
+				}
+				else{
+					connection = ds.getConnection();
+					
+					String query = "select codicaracteristica, nomcaracteristicaca, nomcaracteristicaes, nomcaracteristicaen, tipo, codinivell  from eAccessible.caracteristica where caracteristica.codicaracteristica="+codiCaracteristica;
+					Statement stm = connection.createStatement();
+					ResultSet rs = stm.executeQuery(query);
+					while(rs.next()) {
+						Caracteristica caracteristica = new Caracteristica();
+						caracteristica.setCodicaracteristica(rs.getInt("codicaracteristica"));
+						caracteristica.setNomcaracteristicaca(rs.getString("nomcaracteristicaca"));
+						caracteristica.setNomcaracteristicaes(rs.getString("nomcaracteristicaes"));
+						caracteristica.setNomcaracteristicaen(rs.getString("nomcaracteristicaen"));
+						caracteristica.setTipo(rs.getInt("tipo"));
+						caracteristica.setCodinivell(rs.getInt("codinivell"));
+						caracteristicaList.add(caracteristica);
+					}
+					connection.close();
+					stm.close();
+				}
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			ex.setErrorCode(1105);
+			ex.setErrorMessage("S'ha produit un error a la base de dades");
+			throw(ex);
+		}
+		finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return caracteristicaList;
 	}
 }
