@@ -66,7 +66,7 @@ public class ServeiWeb{
 				ex.setErrorMessage("No s'ha introduit un codi de local valid");
 				throw(ex);
 			}
-			if(accessibilitat.get(i).getValor() <= 0) {
+			if(accessibilitat.get(i).getValor() < 0 && accessibilitat.get(i).getValor() > 5) {
 				ex.setErrorMessage("No s'ha introduit un valor valid");
 				throw(ex);
 			}
@@ -688,4 +688,106 @@ public class ServeiWeb{
 		}
 		return caracteristica;
 	}
+	
+	@WebMethod
+	public int codiLocalLliure() throws ExceptionController{
+		String strEstat = new String();
+		Connection connection = null;
+		
+		ExceptionController ex = new ExceptionController();
+		
+		int lastCodiLocal = 0;
+		
+		try{	
+			InitialContext cxt = new InitialContext();
+			if ( cxt != null ){
+				DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");
+				if ( ds == null ) {
+					strEstat = "Error al crear el datasource";
+					ex.setErrorCode(1204);
+					ex.setErrorMessage("No hi ha connexio amb la base de dades");
+					throw(ex);
+				}
+				else{
+					connection = ds.getConnection();
+					
+					String query = "select MAX(codilocal) codilocal  from eAccessible.local";
+					Statement stm = connection.createStatement();
+					ResultSet rs = stm.executeQuery(query);
+					rs.next();
+					lastCodiLocal = rs.getInt("codilocal");
+				
+					connection.close();
+					stm.close();
+				}
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			ex.setErrorCode(1205);
+			ex.setErrorMessage("S'ha produit un error a la base de dades");
+			throw(ex);
+		}
+		finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return lastCodiLocal+1;
+		
+	}
+	
+	
+	public int  codiAccessibilitatLliure() throws ExceptionController{
+		String strEstat = new String();
+		Connection connection = null;
+		
+		ExceptionController ex = new ExceptionController();
+		
+		int lastCodiAccessibilitat = 0;
+		
+		try{	
+			InitialContext cxt = new InitialContext();
+			if ( cxt != null ){
+				DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");
+				if ( ds == null ) {
+					strEstat = "Error al crear el datasource";
+					ex.setErrorCode(1304);
+					ex.setErrorMessage("No hi ha connexio amb la base de dades");
+					throw(ex);
+				}
+				else{
+					connection = ds.getConnection();
+					
+					String query = "select MAX(codiAccessibilitat) codiAccessibilitat  from eAccessible.accessibilitat";
+					Statement stm = connection.createStatement();
+					ResultSet rs = stm.executeQuery(query);
+					rs.next();
+					lastCodiAccessibilitat = rs.getInt("codiAccessibilitat");
+				
+					connection.close();
+					stm.close();
+				}
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			ex.setErrorCode(1305);
+			ex.setErrorMessage("S'ha produit un error a la base de dades");
+			throw(ex);
+		}
+		finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return lastCodiAccessibilitat+1;
+	}
+	
 }
