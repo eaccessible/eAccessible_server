@@ -17,6 +17,7 @@ import javax.sql.DataSource;
 import bean.Accessibilitat;
 import bean.Caracteristica;
 import bean.CaracteristicaTipoLocal;
+import bean.CaracteristicaValor;
 
 
 @WebService
@@ -197,8 +198,11 @@ public class ServeiWeb{
 				}
 				else{
 					connection = ds.getConnection();
-					String query = "delete from eAccessible.local where codilocal="+codiLocal;
+					String query = "delete from eAccessible.accessibilitat where codilocal="+codiLocal;
 					Statement stm = connection.createStatement();
+					stm.executeUpdate(query);
+					
+					query = "delete from eAccessible.local where codilocal="+codiLocal;
 					stm.executeUpdate(query);
 					
 					connection.close();
@@ -283,6 +287,65 @@ public class ServeiWeb{
 		}
 		return localList;
 	}
+	
+	@WebMethod
+	public Local infoLocalPerCodiLocal(int codiLocal) throws ExceptionController{
+		String strEstat = new String();
+		Connection connection = null;
+		
+		ExceptionController ex = new ExceptionController();
+		
+		Local local = new Local();
+		
+		try{	
+			InitialContext cxt = new InitialContext();
+			if ( cxt != null ){
+				DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");
+				if ( ds == null ) {
+					strEstat = "Error al crear el datasource";
+					ex.setErrorCode(404);
+					ex.setErrorMessage("No hi ha connexio amb la base de dades");
+					throw(ex);
+				}	
+				else{
+					connection = ds.getConnection();
+					
+					String query = "select coditipolocal,codicarrer,nomcarrer,nomvia,codilocal,nomlocal,numero,observacions,verificat from eAccessible.local where codilocal="+codiLocal;
+					Statement stm = connection.createStatement();
+					ResultSet rs = stm.executeQuery(query);
+					rs.next();
+					local.setCoditipolocal(rs.getInt("coditipolocal"));
+					local.setCodicarrer(rs.getInt("codicarrer"));
+					local.setNomcarrer(rs.getString("nomcarrer"));
+					local.setNomvia(rs.getString("nomvia"));
+					local.setCodilocal(rs.getInt("codilocal"));
+					local.setNomlocal(rs.getString("nomlocal"));
+					local.setNumero(rs.getInt("numero"));
+					local.setObservacions(rs.getString("observacions"));
+					local.setVerificat(rs.getString("verificat"));
+					
+					connection.close();
+					stm.close();
+				}
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			ex.setErrorCode(405);
+			ex.setErrorMessage("S'ha produit un error a la base de dades");
+			throw(ex);
+		}
+		finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return local;
+	}
+
 	
 	@WebMethod
 	public List<Local> infoLocalPerNomLocal(String nomLocal) throws ExceptionController{
@@ -689,6 +752,8 @@ public class ServeiWeb{
 		return caracteristica;
 	}
 	
+	
+	
 	@WebMethod
 	public int codiLocalLliure() throws ExceptionController{
 		String strEstat = new String();
@@ -740,6 +805,59 @@ public class ServeiWeb{
 		
 	}
 	
+	@WebMethod
+	public List<CaracteristicaValor>  infoCaracteristicaLocal(int codiLocal) throws ExceptionController{
+		String strEstat = new String();
+		Connection connection = null;
+		
+		ExceptionController ex = new ExceptionController();
+		
+		List<CaracteristicaValor> caracteristicaValorLlista = new ArrayList<CaracteristicaValor>();
+		
+		try{	
+			InitialContext cxt = new InitialContext();
+			if ( cxt != null ){
+				DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgreSQL/eAccessible");
+				if ( ds == null ) {
+					strEstat = "Error al crear el datasource";
+					ex.setErrorCode(1004);
+					ex.setErrorMessage("No hi ha connexio amb la base de dades");
+					throw(ex);
+				}
+				else{
+					connection = ds.getConnection();
+					
+					String query = "select accessibilitat.valor valor, caracteristica.nomcaracteristicaca nomcaracteristicaca, accessibilitat.codilocal, accessibilitat.codicaracteristica codicaracteristica from eAccessible.local INNER JOIN eAccessible.accessibilitat ON local.codilocal = accessibilitat.codilocal INNER JOIN eAccessible.caracteristica ON accessibilitat.codicaracteristica = caracteristica.codicaracteristica AND local.codilocal="+codiLocal;
+					Statement stm = connection.createStatement();
+					ResultSet rs = stm.executeQuery(query);
+					while(rs.next()) {
+						CaracteristicaValor caracteristicaValor = new CaracteristicaValor();
+						caracteristicaValor.setNomcaracteristicaca(rs.getString("nomcaracteristicaca"));
+						caracteristicaValor.setValor(rs.getInt("valor"));
+						caracteristicaValorLlista.add(caracteristicaValor);
+					}
+					connection.close();
+					stm.close();
+				}
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			ex.setErrorCode(1005);
+			ex.setErrorMessage("S'ha produit un error a la base de dades");
+			throw(ex);
+		}
+		finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return caracteristicaValorLlista;
+	}
+
 	
 	public int  codiAccessibilitatLliure() throws ExceptionController{
 		String strEstat = new String();
